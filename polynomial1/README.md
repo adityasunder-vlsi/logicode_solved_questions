@@ -12,25 +12,19 @@ where `x` is a signed 8-bit input and `y` is a signed 16-bit output.
 
 ## MY APPROACH
 
-Instead of implementing the polynomial directly as:
-
-\[
-x^2 + 2x + 1
-\]
-
-I recognized that the expression can be simplified using:
+The polynomial can be simplified as:
 
 \[
 x^2 + 2x + 1 = (x+1)^2
 \]
 
-Therefore, the implementation first calculates `x + 1` and then squares the result.
+Therefore, instead of separately calculating `x²`, `2x`, and `1`, the implementation first calculates `x + 1` and then squares the result.
 
 ```systemverilog
 wire signed [8:0] x_plus_1 = x + 1;
 assign y = x_plus_1 * x_plus_1;
 
-The intermediate signal is 9 bits wide to safely handle the signed range after adding 1.
+A 9-bit intermediate signal is used so that the signed result of x + 1 is represented correctly.
 
 SYNTHESIS RESULTS
 Metric	My Implementation	Reference	Difference
@@ -43,53 +37,48 @@ AREA COMPARISON
 
 My implementation uses approximately 10.3% more area than the reference.
 
-The reference:
+My Area: 2053.22 µm²
+Reference Area: 1861.79 µm²
 
-Area = 1861.79 µm²
-
-My implementation:
-
-Area = 2053.22 µm²
-
-So the reference has the advantage in area.
+The reference therefore has an advantage in area.
 
 PERFORMANCE COMPARISON
 
 My implementation performs significantly better in timing.
 
-My Max Frequency  = 280.9 MHz
-Reference         = 225.7 MHz
+My Max Frequency: 280.9 MHz
+Reference Max Frequency: 225.7 MHz
+Improvement: approximately 24.5%
 
-This gives approximately 24.5% higher maximum frequency than the reference.
+The critical path is also shorter:
 
-The critical path also improved:
-
-My Critical Path = 3.560 ns
-Reference        = 4.430 ns
-
-This is approximately 19.6% shorter than the reference critical path.
-
+My Critical Path: 3.560 ns
+Reference Critical Path: 4.430 ns
+Reduction: approximately 19.6%
 RESULT
 
-The implementation successfully passed simulation and achieved:
+The design successfully passed simulation and achieved:
 
-Lower critical-path delay
-Higher maximum operating frequency
-Slightly higher area
+Correct polynomial computation
 Correct signed arithmetic
-A simplified mathematical implementation using (x+1)^2
+Lower critical-path delay than the reference
+Higher maximum operating frequency than the reference
+Slightly higher area than the reference
 CONCLUSION
 
-This problem was a good example of using mathematical simplification to reduce the complexity of RTL.
+This problem demonstrates how mathematical simplification can be used to create a more efficient RTL implementation.
 
-Rather than directly implementing:
+The original expression:
 
-x² + 2x + 1
+$$ x^2 + 2x + 1 $$
 
-the expression was rewritten as:
+was rewritten as:
 
-(x + 1)²
+$$ (x+1)^2 $$
 
-The resulting design sacrifices approximately 10.3% area compared with the reference but achieves approximately 24.5% better maximum frequency.
+The resulting implementation uses approximately 10.3% more area than the reference but achieves approximately 24.5% higher maximum frequency and a 19.6% shorter critical path.
 
 Overall, the implementation provides a strong timing-oriented solution while maintaining correct functionality.
+
+
+**This one is actual Markdown** — the table will render as a table on GitHub, and the headings will render properly.
