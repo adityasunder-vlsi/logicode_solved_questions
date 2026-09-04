@@ -1,26 +1,40 @@
-Polynomial 5 — SystemVerilog
+Polynomial 5
 
-Problem
+📌 Problem Statement
 
 Design a SystemVerilog module that computes:
 
 y = (a + b)² − (a − b)²
 
-where a and b are signed 8-bit inputs and y is a signed 16-bit output.
+Input
 
-My Implementation
+a → Signed 8-bit input
 
-The design uses intermediate signals for:
+b → Signed 8-bit input
+
+Output
+
+y → Signed 16-bit output
+
+💡 Design Approach
+
+The expression is implemented using intermediate signals:
 
 a + b
-
-a - b
-
+  ↓
 (a + b)²
 
-(a - b)²
+a − b
+  ↓
+(a − b)²
 
-and then subtracts the two squared values.
+Both squared values
+  ↓
+Subtract
+  ↓
+y
+
+🧑‍💻 My SystemVerilog Code
 
 module polynomial_5 ( 
     input  logic signed [7:0] a, 
@@ -44,50 +58,94 @@ module polynomial_5 (
 
 endmodule
 
-Key Learning
+🔑 Key Learning
 
-The important lesson was understanding the difference between a declaration assignment and a continuous assignment.
+The main issue I learned from this problem was the difference between declaration assignment and continuous assignment.
 
-For combinational signals that must continuously respond to changing inputs, I used:
-
-assign A_plus_b = a + b;
-
-instead of:
+❌ Initial Attempt
 
 logic signed [8:0] A_plus_b = a + b;
 
-Verification / Result
+✅ Correct Combinational Assignment
 
-The implementation passed the automated tests.
+assign A_plus_b = a + b;
 
-Reported results for my implementation:
+Using assign makes the intermediate signal continuously follow changes in a and b.
 
-Area: 0.5%
+📐 Mathematical Simplification
 
-Performance: 37.8%
+The expression can also be simplified mathematically:
 
-Reference implementation:
+(a + b)² − (a − b)²
 
-Area: 37.8%
+Expanding:
 
-Performance: 18.1%
+(a² + 2ab + b²) − (a² − 2ab + b²)
 
-The exact meaning of these benchmark percentages depends on the platform's scoring methodology, but the important point is that the submitted implementation passed and produced a substantially different synthesis/optimization result from the reference.
+Therefore:
 
-What I Learned
+y = 4ab
 
-Signed arithmetic in SystemVerilog
+I intentionally implemented the original expression using intermediate signals to practice RTL translation and signed arithmetic.
 
-Intermediate signal sizing
+📊 Synthesis Result
 
-Continuous assignments using assign
+My Implementation
 
-Combinational datapath construction
+Metric
 
-Translating a mathematical expression into synthesizable RTL
+Result
 
-Comparing synthesis results with a reference implementation
+Area
+
+0.5%
+
+Performance
+
+37.8%
 
 Status
 
-✅ Passed
+✅ PASSED
+
+Reference Implementation
+
+Metric
+
+Result
+
+Area
+
+37.8%
+
+Performance
+
+18.1%
+
+The exact meaning of the benchmark percentages depends on the synthesis platform and its scoring methodology.
+
+🧠 What I Learned
+
+Signed arithmetic in SystemVerilog
+
+Signal width selection
+
+Continuous assignments using assign
+
+Combinational RTL design
+
+Translating mathematical equations into hardware
+
+Using intermediate signals
+
+Understanding declaration assignments vs. continuous assignments
+
+Comparing my synthesis result with a reference implementation
+
+✅ Result
+
+Implementation successfully passed the automated tests.
+
+This was a useful exercise in converting a mathematical expression into synthesizable SystemVerilog while understanding how different RTL descriptions can produce different synthesis results.
+
+Status: PASSED ✅
