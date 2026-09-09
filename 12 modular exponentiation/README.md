@@ -1,164 +1,84 @@
-Modular Exponentiation — SystemVerilog
+# Modular Exponentiation — SystemVerilog
 
+Implements:
 
+**y = aᵇ mod m**
 
+where `a`, `b`, `m` are unsigned 4-bit integers and `y` is an unsigned 4-bit integer.
 
+---
 
-Problem
-
-Implement:
-
-y = a^b mod m
-
-where a, b, and m are unsigned 4-bit integers and y is an unsigned 4-bit integer.
-
-My Logic
-
-Repeated Modular Multiplication
-
-I used a simple repeated-multiplication approach:
+## 🔹 My Approach — Repeated Modular Multiplication
 
 result = 1
-
 repeat b times:
-    result = (result × a) mod m
-
+result = (result × a) mod m
 y = result
+
 
 The logic directly builds the required power while applying the modulus after every multiplication.
 
-Advantages
+**Advantages**
+- Simple and easy to understand
+- Directly follows the mathematical definition
+- Easy to debug and verify
 
-Simple and easy to understand.
+**Disadvantages**
+- Computation scales linearly with `b`
+- More multiplication/modulo operations required
+- Larger hardware with a longer critical path
 
-Directly follows the mathematical definition.
+---
 
-Easy to debug and verify.
+## 🔹 Reference Approach — Binary Exponentiation (Repeated Squaring)
 
-Disadvantages
-
-The amount of computation increases with b.
-
-More multiplication/modulo operations are required.
-
-Produces larger hardware with a longer critical path.
-
-Reference Logic
-
-Binary Exponentiation / Repeated Squaring
-
-The reference implementation generates powers by squaring:
+Generates powers by squaring:
 
 a → a² → a⁴ → a⁸
 
-It then checks the binary bits of b and multiplies only the required powers.
 
-For example:
+Then checks the binary bits of `b` and multiplies only the required powers.
 
-b = 13 = 1101₂
+**Example:** `b = 13 = 1101₂ = 8 + 4 + 1`
+→ `a¹³ = a⁸ × a⁴ × a`
 
-13 = 8 + 4 + 1
+This reduces multiplication depth compared to repeated multiplication.
 
-a¹³ = a⁸ × a⁴ × a
+**Advantages**
+- Smaller synthesized hardware
+- Fewer cells and wires
+- Shorter critical path
+- Higher maximum frequency
 
-This reduces the multiplication depth compared with repeatedly multiplying by a.
+**Disadvantages**
+- More complex logic
+- More intermediate signals
+- Harder to understand/debug
 
-Advantages
+---
 
-Smaller synthesized hardware.
+## 📊 PPA Comparison
 
-Fewer cells and wires.
+| Metric              | My Logic         | Reference        |
+|---------------------|------------------|-------------------|
+| Area Score          | Beats 68.5%      | Beats 91.9%       |
+| Wires               | 794              | 587               |
+| Cells               | 1,620            | 1,206             |
+| Area                | 5,179.97 μm²     | 3,965.05 μm²      |
+| Performance Score   | Beats 56.2%      | Beats 89.2%       |
+| Max Frequency       | 39.0 MHz         | 42.0 MHz          |
+| Critical Path       | 25.630 ns        | 23.800 ns         |
 
-Shorter critical path.
+**Area:** Reference uses ~23.5% less area (5,179.97 μm² → 3,965.05 μm²)
+**Performance:** Reference achieves higher max frequency (42.0 MHz vs 39.0 MHz) and shorter critical path (23.800 ns vs 25.630 ns)
 
-Higher maximum frequency.
+---
 
-Disadvantages
+## ✅ Conclusion
 
-More complicated logic.
+Both implementations correctly compute `y = aᵇ mod m`.
 
-More intermediate signals.
+- **My implementation** → simpler, easier to understand and debug
+- **Reference implementation** → more hardware-efficient (lower area, fewer cells/wires, shorter critical path, higher max frequency)
 
-Harder to understand and debug.
-
-PPA Comparison
-
-Metric
-
-My Logic
-
-Reference
-
-Area Score
-
-Beats 68.5%
-
-Beats 91.9%
-
-Wires
-
-794
-
-587
-
-Cells
-
-1,620
-
-1,206
-
-Area
-
-5,179.97 μm²
-
-3,965.05 μm²
-
-Performance Score
-
-Beats 56.2%
-
-Beats 89.2%
-
-Max Frequency
-
-39.0 MHz
-
-42.0 MHz
-
-Critical Path
-
-25.630 ns
-
-23.800 ns
-
-Area
-
-The reference uses approximately 23.5% less area:
-
-5,179.97 μm² → 3,965.05 μm²
-
-Performance
-
-The reference also performs better:
-
-Maximum frequency: 42.0 MHz vs 39.0 MHz
-
-Critical path: 23.800 ns vs 25.630 ns
-
-Conclusion
-
-Both implementations correctly compute y = a^b mod m.
-
-My implementation is simpler and easier to understand, while the reference implementation is more hardware-efficient.
-
-The synthesis results show that the repeated-squaring approach achieves:
-
-Lower area
-
-Fewer cells and wires
-
-Shorter critical path
-
-Higher maximum frequency
-
-Therefore, the reference approach is better for hardware PPA, while my approach is better for simplicity and learning.
+**Takeaway:** Use repeated squaring for PPA-optimized hardware; use repeated multiplication for simplicity and learning.
