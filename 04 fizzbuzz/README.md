@@ -1,5 +1,11 @@
 
 
+## Problem Statement
+
+> Design a module with an internal counter that increments every clock cycle while `resetn` is deasserted, counting from `0` and restarting when `MAX_CYCLES` is reached. Each cycle, assert `fizz` when the count is evenly divisible by `FIZZ`, `buzz` when it is divisible by `BUZZ`, and `fizzbuzz` when it is divisible by both.
+
+## Overview
+
 A counter increments every clock cycle while `resetn` is deasserted, counting from `0` and wrapping back to `0` after `MAX_CYCLES - 1`. Each cycle, three outputs describe the current count:
 
 | Output | High when |
