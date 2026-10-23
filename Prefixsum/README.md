@@ -27,9 +27,6 @@ Replaced the original 182-iteration candidate-search loop with an 8-iteration bi
 | **Maximum Frequency** | 77.9 MHz |
 | **Critical Path** | 12.840 ns |
 
-### Platform Evaluation
-
-![Platform Evaluation Results](image_d537bc.png)
 
 ## Conclusion
 Implemented an 8-iteration combinational integer square-root design and evaluated its area and timing using the platform's synthesis results.
